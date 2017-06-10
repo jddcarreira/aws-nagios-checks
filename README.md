@@ -31,6 +31,12 @@ Metric Example:
     RDSCluster_ReaderCPUUtilization
 ```
 
+### Example
+#### Run a check
+`python aws-nagios-check.py --aws-profile=default1 --aws-region=eu-west-1 --metric=RDSCluster_WriterCPUUtilization --resource=myclust --warn=90 --crit=95`
+#### Check return code
+`echo $?`
+
 ### Available Metrics
 #### Application ELB
 - AELB_ActiveConnectionCount
@@ -66,9 +72,3 @@ Metric Example:
 - RDSCluster_[Writer|Reader]AuroraBinlogReplicaLag
 - RDSCluster_[Writer|Reader]BinLogDiskUsage
 - RDSCluster_[Writer|Reader]ResultSetCacheHitRatio
-
-### Example
-#### Run a check
-`python aws-nagios-check.py --aws-profile=default1 --aws-region=eu-west-1 --metric=RDSCluster_WriterCPUUtilization --resource=myclust --warn=90 --crit=95`
-#### Check return code
-`echo $?`

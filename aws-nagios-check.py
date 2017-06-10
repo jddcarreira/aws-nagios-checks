@@ -14,9 +14,14 @@ Usage:
 Options:
   -h --help                                         Show this screen.
 
-Metrics:
-    RDSClusterReadCPU/RDSClusterWriteCPU            Check RDS Cluster R/W CPU Usage
-    RDSClusterReadQueries/RDSClusterWriteQueries    Check RDS Cluster Queries
+Metrics Prefix:
+    - AELB_                                         ApplicationELB Metrics
+    - RDSCluster_[Reader|Writer]                    RDS Cluster Metrics
+
+Metric Example:
+    [Metric Prefix]_[CW Metric Name]
+    RDSCluster_ReaderCPUUtilization
+
 """
 
 import sys
@@ -24,6 +29,7 @@ import boto3
 
 from libs.nagios_validations import NagiosValidations
 from libs.rds import RDS
+from libs.aelb import AELB
 from docopt import docopt
 
 def cloudwatch_connection(profile, region):
@@ -33,28 +39,34 @@ def cloudwatch_connection(profile, region):
     return con
 
 def main(aws_profile, aws_region, metric, resource, wrn, crt):
-    if metric == "RDSClusterReadCPU" or metric == "RDSClusterWriteCPU":
-        role = "READER" if metric == "RDSClusterReadCPU" else "WRITER"
-        cw_con = cloudwatch_connection(aws_profile, aws_region)
-        cpu_status = RDS(cw_con).get_rds_cluster_cpu(resource, role)
-        if cpu_status:
-            check_code = NagiosValidations.high_is_bad(val=cpu_status['Average'], wrn=wrn, crt=crt)
-        else:
-            check_code(3)
-        sys.exit(check_code)
+    if metric[:11] == "RDSCluster_":
+        metric_name = metric[17:]
+        metric_role = "WRITER" if metric[11:][:6] == "Writer" else "READER"
 
-    elif metric == "RDSClusterReadQueries" or metric == "RDSClusterWriteQueries":
-        role = "READER" if metric == "RDSClusterReadQueries" else "WRITER"
-        cw_con = cloudwatch_connection(aws_profile, aws_region)
-        n_queries = RDS(cw_con).get_rds_cluster_queries(resource, role)
-        if n_queries:
-            check_code = NagiosValidations.high_is_bad(val=n_queries['Average'], wrn=wrn, crt=crt)
-        else:
-            check_code(3)
-        sys.exit(check_code)
+        try:
+            cw_con = cloudwatch_connection(aws_profile, aws_region)
+            metric_val = RDS(cw_con).get_rds_cluster_metric(cluster=resource, role=metric_role, metric=metric_name)
+            if metric_val:
+                check_code = NagiosValidations.high_is_bad(val=metric_val['Average'], wrn=wrn, crt=crt)
+                print "%s: %s" %(metric, metric_val['Average'])
+                sys.exit(check_code)
+        except Exception, e:
+            print e
 
-    else:
-        sys.exit(100)
+
+    elif metric[:5] == "AELB_":
+        metric_name = metric[5:]
+        try:
+            cw_con = cloudwatch_connection(aws_profile, aws_region)
+            metric_val = AELB(cw_con).get_app_elb_metric(loadbalancer=resource, metric=metric_name)
+            if metric_val:
+                check_code = NagiosValidations.high_is_bad(val=metric_val['Average'], wrn=wrn, crt=crt)
+                print "%s: %s" %(metric, metric_val['Average'])
+                sys.exit(check_code)
+        except Exception, e:
+            print e
+
+    sys.exit(4)
 
 if __name__ == "__main__":
     args = docopt(__doc__)

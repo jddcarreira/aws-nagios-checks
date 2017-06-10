@@ -69,6 +69,6 @@ Metric Example:
 
 ### Example
 #### Run a check
-`python aws-nagios-check.py --aws-profile=default1 --aws-region=eu-west-1 --metric=RDSClusterReadCPU --resource=myclust --warn=90 --crit=95`
+`python aws-nagios-check.py --aws-profile=default1 --aws-region=eu-west-1 --metric=RDSCluster_WriterCPUUtilization --resource=myclust --warn=90 --crit=95`
 #### Check return code
 `echo $?`

@@ -1,3 +1,4 @@
+#!/usr/bin/python
 """
 AWS Nagios Check
 Nagios checks based on AWS Cloudwatch metrics

@@ -11,7 +11,7 @@ AWS Nagios Check
 Nagios checks based on AWS Cloudwatch metrics
 
 Usage:
-  aws-nagios-check.py [--aws-profile=<profile>] [--aws-region=<region>] --metric=<metric> --resource=<resource> --warn=<warn> --crit=<critical>
+  aws-nagios-check [--aws-profile=<profile>] [--aws-region=<region>] --metric=<metric> --resource=<resource> --warn=<warn> --crit=<critical>
 
   --aws-profile=<profile>                           AWS Profile
   --metric=<metric>                                 Metric to be feteched

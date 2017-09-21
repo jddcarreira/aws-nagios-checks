@@ -49,6 +49,7 @@ Metric Example:
 - AELB_TargetResponseTime
 - AELB_RequestCount
 - AELB_ClientTLSNegotiationError
+- AELB_TG_RequestCountPerTarget
 
 #### RDS
 - RDSCluster_[Writer|Reader]CommitLatency

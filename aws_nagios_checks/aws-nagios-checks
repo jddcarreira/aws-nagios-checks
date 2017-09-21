@@ -16,7 +16,8 @@ Options:
   -h --help                                         Show this screen.
 
 Metrics Prefix:
-    - AELB_                                         ApplicationELB Metrics
+    - AELB_                                         Application Load Balancer Metrics
+    - AELB_TG_                                      ALB Target Group Metrics
     - RDSCluster_[Reader|Writer]                    RDS Cluster Metrics
 
 Metric Example:
@@ -56,10 +57,16 @@ def main(aws_profile, aws_region, metric, resource, wrn, crt):
 
 
     elif metric[:5] == "AELB_":
-        metric_name = metric[5:]
+        if metric[:8] == "AELB_TG_":
+            metric_type = "TargetGroup"
+            metric_name = metric[8:]
+        else:
+            metric_type = "LoadBalancer"
+            metric_name = metric[5:]
+
         try:
             cw_con = cloudwatch_connection(aws_profile, aws_region)
-            metric_val = AELB(cw_con).get_app_elb_metric(loadbalancer=resource, metric=metric_name)
+            metric_val = AELB(cw_con).get_app_elb_metric(loadbalancer=resource, metric_name=metric_name, metric_type=metric_type)
             if metric_val:
                 check_code = NagiosValidations.high_is_bad(val=metric_val['Average'], wrn=wrn, crt=crt)
                 print "%s: %s" %(metric, metric_val['Average'])

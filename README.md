@@ -3,7 +3,7 @@
 Nagios checks based on AWS Cloudwatch metrics
 
 ### Installation
-`pip install -r requirements.txt`
+pip install git+https://github.com/johnnybus/aws-nagios-checks
 
 ### Usage
 ```

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 """
 AWS Nagios Check
 Nagios checks based on AWS Cloudwatch metrics
@@ -28,9 +28,9 @@ Metric Example:
 import sys
 import boto3
 
-from libs.nagios_validations import NagiosValidations
-from libs.rds import RDS
-from libs.aelb import AELB
+from aws_nagios_checks.libs.nagios_validations import NagiosValidations
+from aws_nagios_checks.libs.rds import RDS
+from aws_nagios_checks.libs.aelb import AELB
 from docopt import docopt
 
 def cloudwatch_connection(profile, region):

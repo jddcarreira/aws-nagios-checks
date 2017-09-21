@@ -28,9 +28,9 @@ Metric Example:
 import sys
 import boto3
 
-from aws_nagios_checks.libs.nagios_validations import NagiosValidations
-from aws_nagios_checks.libs.rds import RDS
-from aws_nagios_checks.libs.aelb import AELB
+from aws_nagios_checks.utils.nagios_validations import NagiosValidations
+from aws_nagios_checks.aws_cw.rds import RDS
+from aws_nagios_checks.aws_cw.aelb import AELB
 from docopt import docopt
 
 def cloudwatch_connection(profile, region):

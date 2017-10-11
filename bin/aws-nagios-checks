@@ -29,9 +29,9 @@ Metric Example:
 import sys
 import boto3
 
-from aws_nagios_checks.utils.nagios_validations import NagiosValidations
-from aws_nagios_checks.aws_cw.rds import RDS
-from aws_nagios_checks.aws_cw.aelb import AELB
+from aws_nagios_checks.nagios_validations import NagiosValidations
+from aws_nagios_checks.rds import RDS
+from aws_nagios_checks.aelb import AELB
 from docopt import docopt
 
 def cloudwatch_connection(profile, region):
@@ -54,7 +54,6 @@ def main(aws_profile, aws_region, metric, resource, wrn, crt):
                 sys.exit(check_code)
         except Exception, e:
             print e
-
 
     elif metric[:5] == "AELB_":
         if metric[:8] == "AELB_TG_":

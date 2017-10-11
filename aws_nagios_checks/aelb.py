@@ -7,14 +7,14 @@ class AELB(object):
         self.window = window
         self.period = period
 
-    def get_app_elb_metric(self, loadbalancer, metric):
+    def get_app_elb_metric(self, loadbalancer, metric_name, metric_type):
         now_datetime = datetime.datetime.utcnow()
         metrics = self.cloudwatch_con.get_metric_statistics(
             Namespace='AWS/ApplicationELB',
-            MetricName=metric,
+            MetricName=metric_name,
             Dimensions=[
                 {
-                    'Name': 'LoadBalancer',
+                    'Name': metric_type,
                     'Value': loadbalancer,
                 }
             ],

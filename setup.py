@@ -13,6 +13,6 @@ setup(
         'boto3',
         'docopt'
     ],
-    scripts=['aws_nagios_checks/aws-nagios-checks'],
+    scripts=['bin/aws-nagios-checks'],
     zip_safe=False
 )
